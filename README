@@ -1,5 +1,18 @@
 # strongSwan Configuration #
 
+## Instalación ##
+
+./configure --prefix=/usr --sysconfdir=/etc --disable-defaults      \
+    --enable-charon --enable-ikev2 --enable-nonce --enable-random     \
+    --enable-openssl --enable-pem --enable-x509 --enable-pubkey       \
+    --enable-constraints --enable-pki --enable-socket-default         \
+    --enable-kernel-netlink --enable-swanctl --enable-resolve         \
+    --enable-eap-identity --enable-eap-md5 --enable-eap-dynamic       \
+    --enable-eap-tls --enable-updown --enable-vici                    \
+    --enable-silent-rules
+
+sudo make all && sudo make install
+
 ## Overview ##
 
 strongSwan is an OpenSource IPsec-based VPN solution.
