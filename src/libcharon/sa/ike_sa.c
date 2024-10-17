@@ -996,6 +996,7 @@ METHOD(ike_sa_t, reset, void,
 							this->ike_sa_id->is_initiator(this->ike_sa_id));
 
 	this->task_manager->reset(this->task_manager, 0, 0);
+	DBG1(DBG_IKE, "Me están llamando desde reset en ike_sa.");
 	this->task_manager->queue_ike(this->task_manager);
 }
 
@@ -1556,6 +1557,7 @@ METHOD(ike_sa_t, initiate, status_t,
 		}
 
 		set_condition(this, COND_ORIGINAL_INITIATOR, TRUE);
+		DBG1(DBG_IKE, "Me están llamando desde initiate en ike_sa.");
 		this->task_manager->queue_ike(this->task_manager);
 	}
 
@@ -1597,9 +1599,11 @@ METHOD(ike_sa_t, initiate, status_t,
 										 this->retry_initiate_interval);
 			this->retry_initiate_queued = TRUE;
 		}
+		DBG1(DBG_IKE, "Me están llamando desde initiate en ike_sa RETURN SUCCESS.");
 		return SUCCESS;
 	}
 	this->retry_initiate_queued = FALSE;
+	DBG1(DBG_IKE, "Me están llamando desde initiate en ike_sa RETURN TASK_MANAGER INITIATE.");
 	return this->task_manager->initiate(this->task_manager);
 }
 
