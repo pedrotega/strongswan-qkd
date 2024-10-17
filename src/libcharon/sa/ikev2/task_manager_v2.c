@@ -1097,6 +1097,7 @@ static status_t process_request(private_task_manager_t *this,
 			{
 				task = (task_t*)ike_vendor_create(this->ike_sa, FALSE);
 				array_insert(this->passive_tasks, ARRAY_TAIL, task);
+				DBG1(DBG_IKE, "Me están llamando desde process_request en task manager.");
 				task = (task_t*)ike_init_create(this->ike_sa, FALSE, NULL);
 				array_insert(this->passive_tasks, ARRAY_TAIL, task);
 				task = (task_t*)ike_natd_create(this->ike_sa, FALSE);
@@ -2060,6 +2061,7 @@ METHOD(task_manager_t, queue_ike, void,
 	}
 	if (!has_queued(this, TASK_IKE_INIT))
 	{
+		DBG1(DBG_IKE, "Me están llamando desde el método queue_ike en task manager.");
 		queue_task(this, (task_t*)ike_init_create(this->ike_sa, TRUE, NULL));
 	}
 	if (!has_queued(this, TASK_IKE_NATD))
