@@ -1379,7 +1379,7 @@ static status_t process_request(private_task_manager_t *this,
 		}
 	}
 	enumerator->destroy(enumerator);
-
+	
 	return build_response(this, message);
 }
 
