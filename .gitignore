@@ -1,0 +1,5 @@
+# Ignorar archivos con extensión .o
+*.o
+
+# Ignorar el directorio .libs
+.libs/
