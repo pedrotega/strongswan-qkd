@@ -1720,9 +1720,11 @@ static status_t generate_message(private_message_t *this, keymat_t *keymat,
 	if (this->major_version == IKEV2_MAJOR_VERSION)
 	{
 		encrypting = this->rule->encrypted;
+		DBG1(DBG_ENC, "Me están llamando desde generate message en message.c Primer if, encripting: %d",encrypting);
 	}
 	else if (!encrypting)
 	{
+		DBG1(DBG_ENC, "Me están llamando desde generate message en message.c Segundo if");
 		/* If at least one payload requires encryption, encrypt the message.
 		 * If no key material is available, the flag will be reset below. */
 		enumerator = this->payloads->create_enumerator(this->payloads);
@@ -1742,17 +1744,21 @@ static status_t generate_message(private_message_t *this, keymat_t *keymat,
 
 #if DEBUG_LEVEL >= 1
 	char str[BUF_LEN];
+	DBG1(DBG_ENC, "Me están llamando desde generate message en message.c");
 	DBG1(DBG_ENC, "generating %s", get_string(this, str, sizeof(str)));
 #endif
 
 	if (keymat)
 	{
+		DBG1(DBG_ENC, "Me están llamando desde generate message en message.c: if keymat");
 		aead = keymat->get_aead(keymat, FALSE);
 	}
 	if (encrypting)
 	{
+		DBG1(DBG_ENC, "Me están llamando desde generate message en message.c: if encrypting");
 		if (aead)
 		{
+			DBG1(DBG_ENC, "Me están llamando desde generate message en message.c: if aead");
 			*encrypted = wrap_payloads(this);
 			(*encrypted)->set_transform(*encrypted, aead);
 		}
@@ -1769,6 +1775,7 @@ static status_t generate_message(private_message_t *this, keymat_t *keymat,
 	}
 	if (!encrypting)
 	{
+		DBG1(DBG_ENC, "Me están llamando desde generate message en message.c: if !encrypting");
 		DBG2(DBG_ENC, "not encrypting payloads");
 		this->is_encrypted = FALSE;
 	}
@@ -1800,6 +1807,7 @@ static status_t generate_message(private_message_t *this, keymat_t *keymat,
 	payload->set_next_type(payload, next_type);
 	generator->generate_payload(generator, payload);
 	ike_header->destroy(ike_header);
+	DBG1(DBG_ENC, "Me están llamando desde generate message en message.c: SUCCESS");
 	return SUCCESS;
 }
 
@@ -1870,6 +1878,7 @@ METHOD(message_t, generate, status_t,
 	encrypted_payload_t *encrypted = NULL;
 	status_t status;
 
+	DBG1(DBG_ENC, "Me están llamando desde generate en message.c");
 	status = generate_message(this, keymat, &generator, &encrypted);
 	if (status != SUCCESS)
 	{
@@ -2025,6 +2034,7 @@ METHOD(message_t, fragment, status_t,
 	}
 	else
 	{
+		DBG1(DBG_ENC, "Me están llamando desde fragment en message.c");
 		status = generate_message(this, keymat, &generator, &encrypted);
 		if (status != SUCCESS)
 		{
