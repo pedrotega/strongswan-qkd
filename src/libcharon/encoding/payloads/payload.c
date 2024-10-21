@@ -261,6 +261,7 @@ payload_t *payload_create(payload_type_t type)
 			return (payload_t*)fragment_payload_create();
 		case PLV2_FRAGMENT:
 			return (payload_t*)encrypted_fragment_payload_create();
+		case PLV2_QKD:
 		default:
 			return (payload_t*)unknown_payload_create(type);
 	}

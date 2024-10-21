@@ -233,6 +233,11 @@ enum payload_type_t {
 	 */
 	PLV2_FRAGMENT = 53,
 
+	/**
+	 * QKD (not defined)
+	 */
+	PLV2_QKD = 54,
+
 #ifdef ME
 	/**
 	 * Identification payload for peers has a value from

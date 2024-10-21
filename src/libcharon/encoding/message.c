@@ -128,6 +128,7 @@ static payload_rule_t ike_sa_init_i_rules[] = {
 	{PLV2_SECURITY_ASSOCIATION,		1,	1,						FALSE,	FALSE},
 	{PLV2_KEY_EXCHANGE,				1,	1,						FALSE,	FALSE},
 	{PLV2_NONCE,					1,	1,						FALSE,	FALSE},
+	{PLV2_QKD,					1,	1,						FALSE,	FALSE},
 	{PLV2_VENDOR_ID,				0,	MAX_VID_PAYLOADS,		FALSE,	FALSE},
 };
 
@@ -143,6 +144,7 @@ static payload_order_t ike_sa_init_i_order[] = {
 	{PLV2_NOTIFY,					NAT_DETECTION_SOURCE_IP},
 	{PLV2_NOTIFY,					NAT_DETECTION_DESTINATION_IP},
 	{PLV2_NOTIFY,					0},
+	{PLV2_QKD,						0},
 	{PLV2_VENDOR_ID,				0},
 };
 
@@ -156,6 +158,7 @@ static payload_rule_t ike_sa_init_r_rules[] = {
 	{PLV2_KEY_EXCHANGE,				1,	1,						FALSE,	FALSE},
 	{PLV2_NONCE,					1,	1,						FALSE,	FALSE},
 	{PLV2_CERTREQ,					0,	MAX_CERTREQ_PAYLOADS,	FALSE,	FALSE},
+	{PLV2_QKD,						1,	1,						FALSE,	FALSE},
 	{PLV2_VENDOR_ID,				0,	MAX_VID_PAYLOADS,		FALSE,	FALSE},
 };
 
@@ -172,6 +175,7 @@ static payload_order_t ike_sa_init_r_order[] = {
 	{PLV2_NOTIFY,					HTTP_CERT_LOOKUP_SUPPORTED},
 	{PLV2_CERTREQ,					0},
 	{PLV2_NOTIFY,					0},
+	{PLV2_QKD,						0},
 	{PLV2_VENDOR_ID,				0},
 };
 
@@ -198,6 +202,7 @@ static payload_rule_t ike_auth_i_rules[] = {
 	{PLV2_TS_RESPONDER,				0,	1,						TRUE,	FALSE},
 #endif /* ME */
 	{PLV2_CONFIGURATION,			0,	1,						TRUE,	FALSE},
+	{PLV2_QKD,						0,	1,						TRUE,	FALSE},
 	{PLV2_VENDOR_ID,				0,	MAX_VID_PAYLOADS,		TRUE,	FALSE},
 };
 
@@ -227,6 +232,7 @@ static payload_order_t ike_auth_i_order[] = {
 	{PLV2_NOTIFY,					ADDITIONAL_IP6_ADDRESS},
 	{PLV2_NOTIFY,					NO_ADDITIONAL_ADDRESSES},
 	{PLV2_NOTIFY,					0},
+	{PLV2_QKD,						0},
 	{PLV2_VENDOR_ID,				0},
 	{PLV2_FRAGMENT,					0},
 };
@@ -246,6 +252,7 @@ static payload_rule_t ike_auth_r_rules[] = {
 	{PLV2_TS_INITIATOR,				0,	1,						TRUE,	FALSE},
 	{PLV2_TS_RESPONDER,				0,	1,						TRUE,	FALSE},
 	{PLV2_CONFIGURATION,			0,	1,						TRUE,	FALSE},
+	{PLV2_QKD,						0,	1,						TRUE,	FALSE},
 	{PLV2_VENDOR_ID,				0,	MAX_VID_PAYLOADS,		TRUE,	FALSE},
 };
 
@@ -272,6 +279,7 @@ static payload_order_t ike_auth_r_order[] = {
 	{PLV2_NOTIFY,					ADDITIONAL_IP6_ADDRESS},
 	{PLV2_NOTIFY,					NO_ADDITIONAL_ADDRESSES},
 	{PLV2_NOTIFY,					0},
+	{PLV2_QKD,						0},
 	{PLV2_VENDOR_ID,				0},
 	{PLV2_FRAGMENT,					0},
 };
