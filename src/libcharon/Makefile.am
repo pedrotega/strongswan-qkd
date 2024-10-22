@@ -43,6 +43,7 @@ encoding/payloads/transform_substructure.c encoding/payloads/transform_substruct
 encoding/payloads/ts_payload.c encoding/payloads/ts_payload.h \
 encoding/payloads/unknown_payload.c encoding/payloads/unknown_payload.h \
 encoding/payloads/vendor_id_payload.c encoding/payloads/vendor_id_payload.h \
+encoding/payloads/qkd_payload.c encoding/payloads/qkd_payload.h \
 encoding/payloads/hash_payload.c encoding/payloads/hash_payload.h \
 encoding/payloads/fragment_payload.c encoding/payloads/fragment_payload.h \
 kernel/kernel_interface.c kernel/kernel_interface.h \
@@ -113,6 +114,7 @@ sa/ikev2/tasks/ike_reauth_complete.c sa/ikev2/tasks/ike_reauth_complete.h \
 sa/ikev2/tasks/ike_redirect.c sa/ikev2/tasks/ike_redirect.h \
 sa/ikev2/tasks/ike_auth_lifetime.c sa/ikev2/tasks/ike_auth_lifetime.h \
 sa/ikev2/tasks/ike_vendor.c sa/ikev2/tasks/ike_vendor.h \
+sa/ikev2/tasks/ike_qkd.c sa/ikev2/tasks/ike_qkd.h \
 sa/ikev2/tasks/ike_verify_peer_cert.c sa/ikev2/tasks/ike_verify_peer_cert.h
 endif
 

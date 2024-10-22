@@ -1255,12 +1255,14 @@ METHOD(ike_sa_t, generate_message, status_t,
 	this->stats[STAT_OUTBOUND] = time_monotonic(NULL);
 	message->set_ike_sa_id(message, this->ike_sa_id);
 	charon->bus->message(charon->bus, message, FALSE, TRUE);
+	DBG1(DBG_ENC, "\t\tMe están llamando desde generate message:ike_sa.c");
 	status = message->generate(message, this->keymat, packet);
 	if (status == SUCCESS)
 	{
 		set_dscp(this, *packet);
 		charon->bus->message(charon->bus, message, FALSE, FALSE);
 	}
+	DBG1(DBG_ENC, "\t\tMe están llamando desde generate message:ike_sa.c (saliendo)");
 	return status;
 }
 
@@ -1313,12 +1315,15 @@ METHOD(ike_sa_t, generate_message_fragmented, status_t,
 	}
 	if (!use_frags)
 	{
+		DBG1(DBG_ENC, "\t\tMe están llamando desde generate_message_fragmented:ike_sa.c");
 		status = generate_message(this, message, &packet);
 		if (status != SUCCESS)
 		{
+			DBG1(DBG_ENC, "\t\tMe están llamando desde generate_message_fragmented:ike_sa.c [NO SUCCESS]");
 			return status;
 		}
 		*packets = enumerator_create_single(packet, NULL);
+		DBG1(DBG_ENC, "\t\tMe están llamando desde generate_message_fragmented:ike_sa.c [SUCCESS]");
 		return SUCCESS;
 	}
 

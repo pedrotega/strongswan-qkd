@@ -1902,6 +1902,7 @@ METHOD(message_t, generate, status_t,
 	{
 		*packet = this->packet->clone(this->packet);
 	}
+	DBG1(DBG_ENC, "\t\tMe están llamando desde generate message en message.c: SUCCESS");
 	return SUCCESS;
 }
 
@@ -2134,6 +2135,7 @@ METHOD(message_t, fragment, status_t,
 		len = min(data.len, frag_len);
 		fragment = create_fragment(this, next, num, count,
 								   chunk_create(data.ptr, len));
+		DBG1(DBG_ENC, "Me están llamando desde fragment:message.c");
 		status = fragment->generate(fragment, keymat, &packet);
 		fragment->destroy(fragment);
 		if (status != SUCCESS)
@@ -2992,19 +2994,27 @@ METHOD(message_t, set_metadata, void,
 METHOD(message_t, destroy, void,
 	private_message_t *this)
 {
+	DBG1(DBG_IKE, "\t\tMe están llamando desde destroy:message.c [inicio]");
 	DESTROY_IF(this->ike_sa_id);
+	DBG1(DBG_IKE, "\t\tMe están llamando desde destroy:message.c [1]");
 	DESTROY_IF(this->parser);
+	DBG1(DBG_IKE, "\t\tMe están llamando desde destroy:message.c [2]");
 	this->payloads->destroy_offset(this->payloads, offsetof(payload_t, destroy));
+	DBG1(DBG_IKE, "\t\tMe están llamando desde destroy:message.c [3]");
 	this->packet->destroy(this->packet);
+	DBG1(DBG_IKE, "\t\tMe están llamando desde destroy:message.c [Antes if]");
 	if (this->frag)
 	{
+		DBG1(DBG_IKE, "\t\tMe están llamando desde destroy:message.c [IF]");
 		reset_defrag(this);
 		free(this->frag);
 	}
 	else
 	{
+		DBG1(DBG_IKE, "\t\tMe están llamando desde destroy:message.c [ELSE]");
 		array_destroy_offset(this->fragments, offsetof(packet_t, destroy));
 	}
+	DBG1(DBG_IKE, "\t\tMe están llamando desde destroy:message.c [FIN]");
 	free(this);
 }
 

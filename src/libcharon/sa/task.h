@@ -70,6 +70,8 @@ enum task_type_t {
 	TASK_IKE_DPD,
 	/** Vendor ID processing */
 	TASK_IKE_VENDOR,
+	/** Read QKD key */
+	TASK_IKE_QKD_KE,
 	/** mark IKE_SA established and trigger the ike_updown() event */
 	TASK_IKE_ESTABLISH,
 #ifdef ME

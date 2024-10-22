@@ -37,6 +37,7 @@
 #include <sa/ikev2/tasks/ike_dpd.h>
 #include <sa/ikev2/tasks/ike_mid_sync.h>
 #include <sa/ikev2/tasks/ike_vendor.h>
+#include <sa/ikev2/tasks/ike_qkd.h>
 #include <sa/ikev2/tasks/ike_verify_peer_cert.h>
 #include <sa/ikev2/tasks/ike_establish.h>
 #include <sa/ikev2/tasks/child_create.h>
@@ -309,7 +310,7 @@ static bool generate_message(private_task_manager_t *this, message_t *message,
 {
 	enumerator_t *fragments;
 	packet_t *fragment;
-
+	DBG1(DBG_IKE, "\t\tMe están llamando desde generate_message:task_manager_v2.c");
 	if (this->ike_sa->generate_message_fragmented(this->ike_sa, message,
 												  &fragments) != SUCCESS)
 	{
@@ -321,6 +322,7 @@ static bool generate_message(private_task_manager_t *this, message_t *message,
 	}
 	fragments->destroy(fragments);
 	array_compress(*packets);
+	DBG1(DBG_IKE, "\t\tMe están llamando desde generate_message:task_manager_v2.c [RETURN TRUE]");
 	return TRUE;
 }
 
@@ -478,7 +480,7 @@ METHOD(task_manager_t, initiate, status_t,
 	host_t *me, *other;
 	exchange_type_t exchange = 0;
 	bool result;
-
+	DBG1(DBG_IKE, "\t\t Me están llamando desde initiate:task_manager_v2.c");
 	if (this->initiating.type != EXCHANGE_TYPE_UNDEFINED)
 	{
 		DBG2(DBG_IKE, "delaying task initiation, %N exchange in progress",
@@ -499,11 +501,14 @@ METHOD(task_manager_t, initiate, status_t,
 		switch (this->ike_sa->get_state(this->ike_sa))
 		{
 			case IKE_CREATED:
+				DBG1(DBG_IKE, "\t\t\t Me están llamando desde IKE_CREATED.");
 				activate_task(this, TASK_IKE_VENDOR);
 				if (activate_task(this, TASK_IKE_INIT))
 				{
 					this->initiating.mid = 0;
 					exchange = IKE_SA_INIT;
+					DBG1(DBG_IKE, "\t\t\t Me están llamando desde IKE_CREATED activando la task QKD.");
+					activate_task(this, TASK_IKE_QKD_KE);
 					activate_task(this, TASK_IKE_NATD);
 					activate_task(this, TASK_IKE_CERT_PRE);
 					activate_task(this, TASK_IKE_AUTH);
@@ -610,6 +615,7 @@ METHOD(task_manager_t, initiate, status_t,
 		enumerator = array_create_enumerator(this->active_tasks);
 		while (enumerator->enumerate(enumerator, &task))
 		{
+			DBG1(DBG_IKE, "\t\t***Comprobando tipos.");
 			DBG2(DBG_IKE, "  %N task", task_type_names, task->get_type(task));
 			switch (task->get_type(task))
 			{
@@ -627,6 +633,8 @@ METHOD(task_manager_t, initiate, status_t,
 				case TASK_IKE_MOBIKE:
 					exchange = INFORMATIONAL;
 					break;
+				case TASK_IKE_QKD_KE:
+					DBG1(DBG_IKE, "\t\t***La task qkd se ha activado.");
 				default:
 					continue;
 			}
@@ -722,11 +730,13 @@ METHOD(task_manager_t, initiate, status_t,
 		}
 		enumerator->destroy(enumerator);
 	}
+	DBG1(DBG_IKE, "\t\tMe están llamando desde initiate:task_manager_v2.c [message->destroy(message)]");
 	message->destroy(message);
-
+	DBG1(DBG_IKE, "\t\tMe están llamando desde initiate:task_manager_v2.c [antes !result]");
 	if (!result)
 	{	/* message generation failed. There is nothing more to do than to
 		 * close the SA */
+		DBG1(DBG_IKE, "Me están llamando desde initiate:task_manager_v2.c [!result]");
 		flush(this);
 		if (this->ike_sa->get_state(this->ike_sa) != IKE_CONNECTING &&
 			this->ike_sa->get_state(this->ike_sa) != IKE_REKEYED)
@@ -739,6 +749,7 @@ METHOD(task_manager_t, initiate, status_t,
 	array_compress(this->active_tasks);
 	array_compress(this->queued_tasks);
 
+	DBG1(DBG_IKE, "\t\tMe están llamando desde initiate:task_manager_v2.c [return retransmit]");
 	return retransmit(this, this->initiating.mid);
 }
 
@@ -2065,6 +2076,11 @@ METHOD(task_manager_t, queue_ike, void,
 	if (!has_queued(this, TASK_IKE_VENDOR))
 	{
 		queue_task(this, (task_t*)ike_vendor_create(this->ike_sa, TRUE));
+	}
+	if (!has_queued(this, TASK_IKE_QKD_KE))
+	{
+		DBG1(DBG_IKE, "\t\tMe están llamando desde el método queue_ike en task manager. (QKD)");
+		//queue_task(this, (task_t*)ike_qkd_create(this->ike_sa, TRUE));
 	}
 	if (!has_queued(this, TASK_IKE_INIT))
 	{
