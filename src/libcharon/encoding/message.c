@@ -128,7 +128,7 @@ static payload_rule_t ike_sa_init_i_rules[] = {
 	{PLV2_SECURITY_ASSOCIATION,		1,	1,						FALSE,	FALSE},
 	{PLV2_KEY_EXCHANGE,				1,	1,						FALSE,	FALSE},
 	{PLV2_NONCE,					1,	1,						FALSE,	FALSE},
-	{PLV2_QKD,						1,	1,						FALSE,	FALSE},
+	{PLV2_QKD,						0,	1,						FALSE,	FALSE},
 	{PLV2_VENDOR_ID,				0,	MAX_VID_PAYLOADS,		FALSE,	FALSE},
 };
 
