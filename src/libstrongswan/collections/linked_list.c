@@ -18,6 +18,7 @@
 
 #include <stdlib.h>
 #include <stdarg.h>
+#include <library.h>
 
 #include "linked_list.h"
 
@@ -531,13 +532,17 @@ METHOD(linked_list_t, destroy_offset, void,
 	private_linked_list_t *this, size_t offset)
 {
 	element_t *current = this->first, *next;
-
 	while (current)
 	{
+		//DBG1(DBG_IKE, "\t\tMe están llamando desde destroy_offset:linked_list.c [1]");
 		void (**method)(void*) = current->value + offset;
-		(*method)(current->value);
+		//DBG1(DBG_IKE, "\t\tMe están llamando desde destroy_offset:linked_list.c [2]");
+		(*method)(current->value);// Me falla en esta línea
+		//DBG1(DBG_IKE, "\t\tMe están llamando desde destroy_offset:linked_list.c [3]");
 		next = current->next;
+		//DBG1(DBG_IKE, "\t\tMe están llamando desde destroy_offset:linked_list.c [4]");
 		free(current);
+		//DBG1(DBG_IKE, "\t\tMe están llamando desde destroy_offset:linked_list.c [5]");
 		current = next;
 	}
 	free(this);

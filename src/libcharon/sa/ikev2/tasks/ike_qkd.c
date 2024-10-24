@@ -159,3 +159,4 @@ ike_qkd_t *ike_qkd_create(ike_sa_t *ike_sa, bool initiator)
 	return &this->public;
 }
 
+

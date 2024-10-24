@@ -29,6 +29,7 @@
 #include <encoding/payloads/sa_payload.h>
 #include <encoding/payloads/ke_payload.h>
 #include <encoding/payloads/nonce_payload.h>
+#include <encoding/payloads/qkd_payload.h>
 
 /** maximum retries to do with cookies/other dh groups */
 #define MAX_RETRIES 5
@@ -129,6 +130,11 @@ struct private_ike_init_t {
 	 * Whether to follow IKEv2 redirects as per RFC 5685
 	 */
 	bool follow_redirects;
+
+	/**
+	 * QKD key id;
+	 */
+	char *qkd_key_id;
 };
 
 /**
@@ -560,6 +566,15 @@ static void process_payloads(private_ike_init_t *this, message_t *message)
 
 				this->other_nonce = nonce_payload->get_nonce(nonce_payload);
 				break;
+			}
+			case PLV2_QKD:
+			{
+				DBG1(DBG_IKE, "\t\tMe están llamando desde process_payloads:ike_init.c PLV2_QKD.");
+				qkd_payload_t *qkd_payload = (qkd_payload_t*)payload;
+				chunk_t data = qkd_payload->get_data(qkd_payload);
+				DBG1(DBG_IKE, "\t\tMe están llamando desde PLV_QKD: %s", data);
+
+				//this->qkd_key_id = qkd_payload->get_data(qkd_payload);
 			}
 			case PLV2_NOTIFY:
 			{

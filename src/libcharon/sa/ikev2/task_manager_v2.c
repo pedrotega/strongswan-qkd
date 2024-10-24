@@ -2080,7 +2080,7 @@ METHOD(task_manager_t, queue_ike, void,
 	if (!has_queued(this, TASK_IKE_QKD_KE))
 	{
 		DBG1(DBG_IKE, "\t\tMe están llamando desde el método queue_ike en task manager. (QKD)");
-		//queue_task(this, (task_t*)ike_qkd_create(this->ike_sa, TRUE));
+		queue_task(this, (task_t*)ike_qkd_create(this->ike_sa, TRUE));
 	}
 	if (!has_queued(this, TASK_IKE_INIT))
 	{

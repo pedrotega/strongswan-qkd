@@ -2994,15 +2994,11 @@ METHOD(message_t, set_metadata, void,
 METHOD(message_t, destroy, void,
 	private_message_t *this)
 {
-	DBG1(DBG_IKE, "\t\tMe están llamando desde destroy:message.c [inicio]");
 	DESTROY_IF(this->ike_sa_id);
-	DBG1(DBG_IKE, "\t\tMe están llamando desde destroy:message.c [1]");
 	DESTROY_IF(this->parser);
-	DBG1(DBG_IKE, "\t\tMe están llamando desde destroy:message.c [2]");
-	this->payloads->destroy_offset(this->payloads, offsetof(payload_t, destroy));
-	DBG1(DBG_IKE, "\t\tMe están llamando desde destroy:message.c [3]");
+	//Si pongo esta línea de código no funciona
+	//this->payloads->destroy_offset(this->payloads, offsetof(payload_t, destroy));
 	this->packet->destroy(this->packet);
-	DBG1(DBG_IKE, "\t\tMe están llamando desde destroy:message.c [Antes if]");
 	if (this->frag)
 	{
 		DBG1(DBG_IKE, "\t\tMe están llamando desde destroy:message.c [IF]");
@@ -3011,10 +3007,8 @@ METHOD(message_t, destroy, void,
 	}
 	else
 	{
-		DBG1(DBG_IKE, "\t\tMe están llamando desde destroy:message.c [ELSE]");
 		array_destroy_offset(this->fragments, offsetof(packet_t, destroy));
 	}
-	DBG1(DBG_IKE, "\t\tMe están llamando desde destroy:message.c [FIN]");
 	free(this);
 }
 
