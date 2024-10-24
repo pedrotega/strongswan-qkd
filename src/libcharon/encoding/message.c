@@ -1169,6 +1169,8 @@ METHOD(message_t, add_payload, void,
 
 	DBG2(DBG_ENC ,"added payload of type %N to message",
 		 payload_type_names, payload->get_type(payload));
+	/*DBG1(DBG_ENC ,"\tNext type: %N",
+		 payload_type_names, payload->get_next_type(payload));*/
 }
 
 METHOD(message_t, add_notify, void,
@@ -1797,6 +1799,10 @@ static status_t generate_message(private_message_t *this, keymat_t *keymat,
 	{
 		payload->set_next_type(payload, next->get_type(next));
 		generator->generate_payload(generator, payload);
+		// DBG1(DBG_ENC ,"added payload of type %N to message",
+		//  payload_type_names, payload->get_type(payload));
+		// DBG1(DBG_ENC ,"\tNext type: %N",
+		//  payload_type_names, payload->get_next_type(payload));
 		payload = next;
 	}
 	enumerator->destroy(enumerator);
@@ -1814,6 +1820,10 @@ static status_t generate_message(private_message_t *this, keymat_t *keymat,
 	}
 	payload->set_next_type(payload, next_type);
 	generator->generate_payload(generator, payload);
+	DBG1(DBG_ENC ,"added payload of type %N to message",
+		 payload_type_names, payload->get_type(payload));
+	DBG1(DBG_ENC ,"\tNext type: %N",
+		payload_type_names, payload->get_next_type(payload));
 	ike_header->destroy(ike_header);
 	DBG1(DBG_ENC, "\t\tMe están llamando desde generate message en message.c: SUCCESS");
 	return SUCCESS;
@@ -1832,6 +1842,7 @@ static status_t finalize_message(private_message_t *this, keymat_t *keymat,
 
 	if (encrypted)
 	{
+		DBG1(DBG_ENC, "\t\tMe están llamando desde finalize_generate:message.c [encrypted]");
 		if (this->is_encrypted)
 		{	/* for IKEv1 instead of associated data we provide the IV */
 			if (!keymat_v1->get_iv(keymat_v1, this->message_id, &chunk))
@@ -1876,6 +1887,7 @@ static status_t finalize_message(private_message_t *this, keymat_t *keymat,
 		}
 	}
 	generator->destroy(generator);
+	DBG1(DBG_ENC, "\t\tMe están llamando desde finalize_message:message.c [SUCCESS]");
 	return SUCCESS;
 }
 
@@ -1902,7 +1914,7 @@ METHOD(message_t, generate, status_t,
 	{
 		*packet = this->packet->clone(this->packet);
 	}
-	DBG1(DBG_ENC, "\t\tMe están llamando desde generate message en message.c: SUCCESS");
+	DBG1(DBG_ENC, "\t\tMe están llamando desde generate en message.c: SUCCESS");
 	return SUCCESS;
 }
 
@@ -2304,8 +2316,8 @@ static status_t parse_payloads(private_message_t *this)
 
 	while (type != PL_NONE)
 	{
-		DBG2(DBG_ENC, "starting parsing a %N payload",
-			 payload_type_names, type);
+		DBG1(DBG_ENC, "starting parsing a %N payload %d",
+			 payload_type_names, type, type);
 
 		status = this->parser->parse_payload(this->parser, type, &payload);
 		if (status != SUCCESS)
@@ -2324,14 +2336,16 @@ static status_t parse_payloads(private_message_t *this)
 			payload->destroy(payload);
 			return VERIFY_ERROR;
 		}
+	
 		if (payload->get_type(payload) == PL_UNKNOWN)
 		{
-			DBG2(DBG_ENC, "%N payload unknown or not allowed",
+			DBG1(DBG_ENC, "%N payload unknown or not allowed",
 				 payload_type_names, type);
+			DBG1(DBG_ENC, "%d", PL_UNKNOWN);
 		}
 		else
 		{
-			DBG2(DBG_ENC, "%N payload verified, adding to payload list",
+			DBG1(DBG_ENC, "\t%N payload verified, adding to payload list",
 				 payload_type_names, type);
 		}
 		this->payloads->insert_last(this->payloads, payload);
@@ -2345,6 +2359,7 @@ static status_t parse_payloads(private_message_t *this)
 			break;
 		}
 		type = payload->get_next_type(payload);
+		DBG1(DBG_ENC, "Next type: %d", type);
 	}
 	return SUCCESS;
 }
@@ -2652,7 +2667,7 @@ METHOD(message_t, parse_body, status_t,
 {
 	status_t status = SUCCESS;
 
-	DBG2(DBG_ENC, "parsing body of message, first payload is %N",
+	DBG1(DBG_ENC, "parsing body of message, first payload is %N",
 		 payload_type_names, this->first_payload);
 
 	this->rule = get_message_rule(this);
@@ -2668,6 +2683,7 @@ METHOD(message_t, parse_body, status_t,
 	 * contained in the encrypted payload, which are handled below) */
 	if (this->parser)
 	{
+		DBG1(DBG_ENC, "Me están llamando desde parse_body:message.c");
 		status = parse_payloads(this);
 		if (status != SUCCESS)
 		{	/* error is already logged */

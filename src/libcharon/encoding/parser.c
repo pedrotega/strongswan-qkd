@@ -376,13 +376,14 @@ METHOD(parser_t, parse_payload, status_t,
 	/* create instance of the payload to parse */
 	if (payload_is_known(payload_type, this->major_version))
 	{
+		DBG1(DBG_ENC, "Type of the pld: %d", payload_type);
 		pld = payload_create(payload_type);
 	}
 	else
 	{
 		pld = (payload_t*)unknown_payload_create(payload_type);
 	}
-
+	DBG1(DBG_ENC, "\tType of the pld: %d", pld->get_type(pld));
 	DBG2(DBG_ENC, "parsing %N payload, %d bytes left",
 		 payload_type_names, payload_type, this->input_roof - this->byte_pos);
 

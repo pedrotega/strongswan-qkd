@@ -369,6 +369,12 @@ static bool build_payloads(private_ike_init_t *this, message_t *message)
 
 		sa_payload = sa_payload_create_from_proposals_v2(proposal_list);
 		proposal_list->destroy_offset(proposal_list, offsetof(proposal_t, destroy));
+
+		char *id_qkd = "73a58f2e37d1410ca2ae191911bee564";
+		this->qkd_key_id = chunk_create(id_qkd, strlen(id_qkd));
+		qkd_payload = qkd_payload_create(PLV2_QKD);
+		qkd_payload->set_data(qkd_payload,this->qkd_key_id);
+		message->add_payload(message, (payload_t*)qkd_payload);
 	}
 	else
 	{
@@ -401,12 +407,6 @@ static bool build_payloads(private_ike_init_t *this, message_t *message)
 		message->add_payload(message, (payload_t*)ke_payload);
 		message->add_payload(message, (payload_t*)nonce_payload);
 	}
-
-	char *id_qkd = "73a58f2e37d1410ca2ae191911bee564";
-	this->qkd_key_id = chunk_create(id_qkd, strlen(id_qkd));
-	qkd_payload = qkd_payload_create(PLV2_QKD);
-	qkd_payload->set_data(qkd_payload,this->qkd_key_id);
-	message->add_payload(message, (payload_t*)qkd_payload);
 
 	/* negotiate fragmentation if we are not rekeying */
 	if (!this->old_sa &&
@@ -580,7 +580,7 @@ static void process_payloads(private_ike_init_t *this, message_t *message)
 				DBG1(DBG_IKE, "\t\tMe están llamando desde process_payloads:ike_init.c PLV2_QKD.");
 				qkd_payload_t *qkd_payload = (qkd_payload_t*)payload;
 				chunk_t data = qkd_payload->get_data(qkd_payload);
-				DBG1(DBG_IKE, "\t\tMe están llamando desde PLV_QKD: %s", data);
+				DBG1(DBG_IKE, "\t\tMe están llamando desde PLV2_QKD: %s", data);
 
 				//this->qkd_key_id = qkd_payload->get_data(qkd_payload);
 			}
