@@ -143,6 +143,13 @@ METHOD(payload_t, get_length, size_t,
 	return this->payload_length;
 }
 
+METHOD(qkd_payload_t, set_data, void,
+	 private_qkd_payload_t *this, chunk_t data)
+{
+	this->data = chunk_clone(data);
+	this->payload_length = get_header_length(this) + data.len;
+}
+
 METHOD(qkd_payload_t, get_data, chunk_t,
 	private_qkd_payload_t *this)
 {
@@ -159,8 +166,7 @@ METHOD2(payload_t, qkd_payload_t, destroy, void,
 /*
  * Described in header
  */
-qkd_payload_t *qkd_payload_create_data(payload_type_t type,
-												   chunk_t data)
+qkd_payload_t *qkd_payload_create(payload_type_t type)
 {
 	private_qkd_payload_t *this;
 
@@ -176,21 +182,13 @@ qkd_payload_t *qkd_payload_create_data(payload_type_t type,
 				.get_type = _get_type,
 				.destroy = _destroy,
 			},
+            .set_data = _set_data,
 			.get_data = _get_data,
 			.destroy = _destroy,
 		},
 		.next_payload = PL_NONE,
-		.payload_length = get_header_length(this) + data.len,
-		.data = data,
+		.payload_length = get_header_length(this),
 		.type = type,
 	);
 	return &this->public;
-}
-
-/*
- * Described in header
- */
-qkd_payload_t *qkd_payload_create(payload_type_t type)
-{
-	return qkd_payload_create_data(type, chunk_empty);
 }

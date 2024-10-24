@@ -41,14 +41,21 @@ struct qkd_payload_t {
 	payload_t payload_interface;
 
 	/**
-	 * Get the VID data.
+	 * Set the data value.
 	 *
-	 * @return		VID data, pointing to an internal chunk_t
+	 * @param nonce			chunk containing the data, will be cloned
+	 */
+	void (*set_data) (qkd_payload_t *this, chunk_t nonce);
+
+	/**
+	 * Get data.
+	 *
+	 * @return		a chunk containing the cloned nonce
 	 */
 	chunk_t (*get_data)(qkd_payload_t *this);
 
 	/**
-	 * Destroy Vendor ID payload.
+	 * Destroy qkd_payload_t object.
 	 */
 	void (*destroy)(qkd_payload_t *this);
 };
@@ -61,14 +68,4 @@ struct qkd_payload_t {
  */
 qkd_payload_t *qkd_payload_create(payload_type_t type);
 
-/**
- * Creates a vendor ID payload using a chunk of data
- *
- * @param type		PLV2_qkd or PLV1_qkd
- * @param data		data to use in vID key qkd payload, gets owned by payload
- * @return			vendor ID payload
- */
-qkd_payload_t *qkd_payload_create_data(payload_type_t type,
-												   chunk_t data);
-
-#endif /** qkd_PAYLOAD_H_ @}*/
+#endif /** QKD_PAYLOAD_H_ @}*/

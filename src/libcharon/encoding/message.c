@@ -128,7 +128,7 @@ static payload_rule_t ike_sa_init_i_rules[] = {
 	{PLV2_SECURITY_ASSOCIATION,		1,	1,						FALSE,	FALSE},
 	{PLV2_KEY_EXCHANGE,				1,	1,						FALSE,	FALSE},
 	{PLV2_NONCE,					1,	1,						FALSE,	FALSE},
-	{PLV2_QKD,						0,	1,						FALSE,	FALSE},
+	{PLV2_QKD,						1,	1,						FALSE,	FALSE},
 	{PLV2_VENDOR_ID,				0,	MAX_VID_PAYLOADS,		FALSE,	FALSE},
 };
 
@@ -2997,7 +2997,7 @@ METHOD(message_t, destroy, void,
 	DESTROY_IF(this->ike_sa_id);
 	DESTROY_IF(this->parser);
 	//Si pongo esta línea de código no funciona
-	//this->payloads->destroy_offset(this->payloads, offsetof(payload_t, destroy));
+	this->payloads->destroy_offset(this->payloads, offsetof(payload_t, destroy));
 	this->packet->destroy(this->packet);
 	if (this->frag)
 	{

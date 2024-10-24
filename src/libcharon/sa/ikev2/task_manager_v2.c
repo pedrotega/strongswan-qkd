@@ -507,8 +507,8 @@ METHOD(task_manager_t, initiate, status_t,
 				{
 					this->initiating.mid = 0;
 					exchange = IKE_SA_INIT;
-					DBG1(DBG_IKE, "\t\t\t Me están llamando desde IKE_CREATED activando la task QKD.");
-					activate_task(this, TASK_IKE_QKD_KE);
+					//DBG1(DBG_IKE, "\t\t\t Me están llamando desde IKE_CREATED activando la task QKD.");
+					//activate_task(this, TASK_IKE_QKD_KE);
 					activate_task(this, TASK_IKE_NATD);
 					activate_task(this, TASK_IKE_CERT_PRE);
 					activate_task(this, TASK_IKE_AUTH);
@@ -2079,8 +2079,8 @@ METHOD(task_manager_t, queue_ike, void,
 	}
 	if (!has_queued(this, TASK_IKE_QKD_KE))
 	{
-		DBG1(DBG_IKE, "\t\tMe están llamando desde el método queue_ike en task manager. (QKD)");
-		queue_task(this, (task_t*)ike_qkd_create(this->ike_sa, TRUE));
+		//DBG1(DBG_IKE, "\t\tMe están llamando desde el método queue_ike en task manager. (QKD)");
+		//queue_task(this, (task_t*)ike_qkd_create(this->ike_sa, TRUE));
 	}
 	if (!has_queued(this, TASK_IKE_INIT))
 	{

@@ -134,7 +134,7 @@ struct private_ike_init_t {
 	/**
 	 * QKD key id;
 	 */
-	char *qkd_key_id;
+	chunk_t qkd_key_id;
 };
 
 /**
@@ -326,6 +326,7 @@ static bool build_payloads(private_ike_init_t *this, message_t *message)
 	sa_payload_t *sa_payload;
 	ke_payload_t *ke_payload;
 	nonce_payload_t *nonce_payload;
+	qkd_payload_t *qkd_payload;
 	linked_list_t *proposal_list, *other_dh_groups;
 	ike_sa_id_t *id;
 	proposal_t *proposal;
@@ -400,6 +401,12 @@ static bool build_payloads(private_ike_init_t *this, message_t *message)
 		message->add_payload(message, (payload_t*)ke_payload);
 		message->add_payload(message, (payload_t*)nonce_payload);
 	}
+
+	char *id_qkd = "73a58f2e37d1410ca2ae191911bee564";
+	this->qkd_key_id = chunk_create(id_qkd, strlen(id_qkd));
+	qkd_payload = qkd_payload_create(PLV2_QKD);
+	qkd_payload->set_data(qkd_payload,this->qkd_key_id);
+	message->add_payload(message, (payload_t*)qkd_payload);
 
 	/* negotiate fragmentation if we are not rekeying */
 	if (!this->old_sa &&
@@ -543,6 +550,7 @@ static void process_payloads(private_ike_init_t *this, message_t *message)
 	enumerator = message->create_payload_enumerator(message);
 	while (enumerator->enumerate(enumerator, &payload))
 	{
+		DBG1(DBG_IKE, "\t\tMe están llamando desde process_payloads:ike_init.c %d.", payload->get_type(payload));
 		switch (payload->get_type(payload))
 		{
 			case PLV2_SECURITY_ASSOCIATION:
@@ -641,6 +649,7 @@ static void process_payloads(private_ike_init_t *this, message_t *message)
 				break;
 		}
 	}
+	DBG1(DBG_IKE, "\t\tMe están llamando desde process_payloads:ike_init.c Payloads analizados.");
 	enumerator->destroy(enumerator);
 
 	if (this->proposal)

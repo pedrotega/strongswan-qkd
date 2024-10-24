@@ -86,12 +86,12 @@ static inline chunk_t get_qkd_data(qkd_data_t *data)
 METHOD(task_t, build, status_t,
 	private_ike_qkd_t *this, message_t *message)
 {
-    DBG1(DBG_IKE, "\t\t**********Me están llamando desde build:ike_qkd.c");
-	qkd_payload_t *qkd;
+    DBG1(DBG_IKE, "\t\t**********Me están llamando desde build:ike_qkd.c (%d)", PLV2_QKD);
+	/*qkd_payload_t *qkd;
     char *id = "id de prueba";
     qkd_data_t data = { id, id };
-    qkd = qkd_payload_create_data(PLV2_QKD, get_qkd_data(&data));
-    message->add_payload(message, &qkd->payload_interface);
+    qkd = qkd_payload_create(PLV2_QKD);
+    message->add_payload(message, &qkd->payload_interface);*/
     DBG1(DBG_IKE, "\t\t**********Me están llamando desde build:ike_qkd.c [FIN]");
 	return this->initiator ? NEED_MORE : SUCCESS;
 }
