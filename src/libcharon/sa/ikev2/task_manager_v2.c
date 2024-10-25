@@ -1963,7 +1963,6 @@ METHOD(task_manager_t, process_message, status_t,
 			DBG1(DBG_IKE, "\t\tMe están llamando desde process_message:task_manager_v2 [EXCHANGE_TYPE_UNDEFINED]");
 			return SUCCESS;
 		}
-		DBG1(DBG_IKE, "\t\tMe están llamando desde process_message:task_manager_v2 [process_req]");
 		switch (process_request(this, msg))
 		{
 			case SUCCESS:
@@ -1972,7 +1971,10 @@ METHOD(task_manager_t, process_message, status_t,
 				this->responding.mid++;
 				memcpy(this->responding.prev_hash, this->responding.hash,
 					   sizeof(this->responding.prev_hash));
+<<<<<<< HEAD
 				//DBG1(DBG_IKE, "\t\tMe están llamando desde process_message:task_manager_v2 [FIN SUCCESS]");
+=======
+>>>>>>> parent of 9217c04 (Checking for errors genereating response IKE_INIT)
 				break;
 			case NEED_MORE:
 				break;
@@ -2031,7 +2033,6 @@ METHOD(task_manager_t, process_message, status_t,
 						"%s.half_open_timeout", HALF_OPEN_IKE_SA_TIMEOUT,
 						lib->ns));
 	}
-	DBG1(DBG_IKE, "\t\tMe están llamando desde process_message:task_manager_v2 [RETURN SUCCESS]");
 	return SUCCESS;
 }
 
