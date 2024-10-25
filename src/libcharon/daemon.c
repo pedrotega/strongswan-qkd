@@ -845,18 +845,22 @@ static bool sender_receiver_cb(void *plugin, plugin_feature_t *feature,
 {
 	if (reg)
 	{
+		DBG1(DBG_IKE, "\t\tMe están llamando desde sender_receiver_cb:daemon.c [IF]");
 		this->public.receiver = receiver_create();
 		if (!this->public.receiver)
 		{
 			return FALSE;
 		}
+		DBG1(DBG_IKE, "\t\tMe están llamando desde sender_receiver_cb:daemon.c [SENDER]");
 		this->public.sender = sender_create();
 	}
 	else
 	{
+		DBG1(DBG_IKE, "\t\tMe están llamando desde sender_receiver_cb:daemon.c [ELSE]]");
 		DESTROY_IF(this->public.receiver);
 		DESTROY_IF(this->public.sender);
 	}
+	DBG1(DBG_IKE, "\t\tMe están llamando desde sender_receiver_cb:daemon.c [RETURN]");
 	return TRUE;
 }
 

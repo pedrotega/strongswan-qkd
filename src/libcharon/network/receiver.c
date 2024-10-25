@@ -627,8 +627,10 @@ static job_requeue_t receive_packets(private_receiver_t *this)
 			}
 		}
 	}
+	DBG1(DBG_IKE, "\t\tMe están llamando desde receive_packets:reveiver.c");
 	lib->processor->queue_job(lib->processor,
 							  (job_t*)process_message_job_create(message));
+	DBG1(DBG_IKE, "\t\tMe están llamando desde receive_packets:reveiver.c [RETURN]");
 	return JOB_REQUEUE_DIRECT;
 }
 
@@ -736,9 +738,11 @@ receiver_t *receiver_create()
 	}
 	memcpy(this->secret_old, this->secret, SECRET_LENGTH);
 
+	DBG1(DBG_IKE, "\t\tMe están llamando desde receiver_create:reveiver.c");
 	lib->processor->queue_job(lib->processor,
 		(job_t*)callback_job_create_with_prio((callback_job_cb_t)receive_packets,
 			this, NULL, (callback_job_cancel_t)return_false, JOB_PRIO_CRITICAL));
 
+	DBG1(DBG_IKE, "\t\tMe están llamando desde receiver_create:reveiver.c [RETURN]");
 	return &this->public;
 }

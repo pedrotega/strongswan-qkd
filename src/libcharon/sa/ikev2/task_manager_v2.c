@@ -1064,18 +1064,22 @@ static status_t build_response(private_task_manager_t *this, message_t *request)
 		charon->bus->ike_updown(charon->bus, this->ike_sa, FALSE);
 		return DESTROY_ME;
 	}
-
+	DBG1(DBG_ENC, "\t\tMe están llamando desde build_response:task_manager_v2.c [ANTES]");
 	send_packets(this, this->responding.packets, NULL, NULL);
+	DBG1(DBG_ENC, "\t\tMe están llamando desde build_response:task_manager_v2.c [DESPUES]");
 	if (delete)
 	{
+		DBG1(DBG_ENC, "\t\tMe están llamando desde build_response:task_manager_v2.c [DELETE]");
 		if (hook)
 		{
+			DBG1(DBG_ENC, "\t\tMe están llamando desde build_response:task_manager_v2.c [hook]");
 			charon->bus->ike_updown(charon->bus, this->ike_sa, FALSE);
 		}
 		return DESTROY_ME;
 	}
 	else if (mid_sync)
 	{
+		DBG1(DBG_ENC, "\t\tMe están llamando desde build_response:task_manager_v2.c [CLEAR]");
 		/* we don't want to resend messages to sync MIDs if requests with the
 		 * previous MID arrive */
 		clear_packets(this->responding.packets);
@@ -1086,6 +1090,7 @@ static status_t build_response(private_task_manager_t *this, message_t *request)
 
 	array_compress(this->passive_tasks);
 
+	DBG1(DBG_ENC, "\t\tMe están llamando desde build_response:task_manager_v2.c [SUCCESS]");
 	return SUCCESS;
 }
 
@@ -1946,6 +1951,7 @@ METHOD(task_manager_t, process_message, status_t,
 		{	/* ignore messages altered to EXCHANGE_TYPE_UNDEFINED */
 			return SUCCESS;
 		}
+		DBG1(DBG_IKE, "\t\tMe están llamando desde process_message:task_manager_v2 [process_req]");
 		switch (process_request(this, msg))
 		{
 			case SUCCESS:
@@ -1954,6 +1960,7 @@ METHOD(task_manager_t, process_message, status_t,
 				this->responding.mid++;
 				memcpy(this->responding.prev_hash, this->responding.hash,
 					   sizeof(this->responding.prev_hash));
+				DBG1(DBG_IKE, "\t\tMe están llamando desde process_message:task_manager_v2 [FIN SUCCESS]");
 				break;
 			case NEED_MORE:
 				break;
@@ -2012,6 +2019,7 @@ METHOD(task_manager_t, process_message, status_t,
 						"%s.half_open_timeout", HALF_OPEN_IKE_SA_TIMEOUT,
 						lib->ns));
 	}
+	DBG1(DBG_IKE, "\t\tMe están llamando desde process_message:task_manager_v2 [RETURN SUCCESS]");
 	return SUCCESS;
 }
 

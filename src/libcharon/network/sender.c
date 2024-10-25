@@ -133,6 +133,7 @@ METHOD(sender_t, send_, void,
 	}
 
 	send_no_marker(this, packet);
+	DBG1(DBG_NET, "sending packet: end");
 }
 
 /**
