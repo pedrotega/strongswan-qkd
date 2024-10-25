@@ -72,20 +72,20 @@ METHOD(job_t, execute, job_requeue_t,
 			 this->message->get_source(this->message),
 			 this->message->get_destination(this->message),
 			 this->message->get_packet_data(this->message).len);
-		DBG1(DBG_IKE, "\t\tMe están llamando desde execute:process_message_job.c");
+		//DBG1(DBG_IKE, "\t\tMe están llamando desde execute:process_message_job.c");
 		if (ike_sa->process_message(ike_sa, this->message) == DESTROY_ME)
 		{
-			DBG1(DBG_IKE, "\t\tMe están llamando desde execute:process_message_job.c [IF]");
+			//DBG1(DBG_IKE, "\t\tMe están llamando desde execute:process_message_job.c [IF]");
 			charon->ike_sa_manager->checkin_and_destroy(charon->ike_sa_manager,
 														ike_sa);
 		}
 		else
 		{
-			DBG1(DBG_IKE, "\t\tMe están llamando desde execute:process_message_job.c [ELSE]");
+			//DBG1(DBG_IKE, "\t\tMe están llamando desde execute:process_message_job.c [ELSE]");
 			charon->ike_sa_manager->checkin(charon->ike_sa_manager, ike_sa);
 		}
 	}
-	DBG1(DBG_IKE, "\t\tMe están llamando desde execute:process_message_job.c [RETURN]");
+	//DBG1(DBG_IKE, "\t\tMe están llamando desde execute:process_message_job.c [RETURN]");
 	return JOB_REQUEUE_NONE;
 }
 

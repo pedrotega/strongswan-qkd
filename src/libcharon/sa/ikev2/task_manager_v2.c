@@ -311,7 +311,7 @@ static bool generate_message(private_task_manager_t *this, message_t *message,
 {
 	enumerator_t *fragments;
 	packet_t *fragment;
-	DBG1(DBG_IKE, "\t\tMe están llamando desde generate_message:task_manager_v2.c");
+	//DBG1(DBG_IKE, "\t\tMe están llamando desde generate_message:task_manager_v2.c");
 	if (this->ike_sa->generate_message_fragmented(this->ike_sa, message,
 												  &fragments) != SUCCESS)
 	{
@@ -323,7 +323,7 @@ static bool generate_message(private_task_manager_t *this, message_t *message,
 	}
 	fragments->destroy(fragments);
 	array_compress(*packets);
-	DBG1(DBG_IKE, "\t\tMe están llamando desde generate_message:task_manager_v2.c [RETURN TRUE]");
+	//DBG1(DBG_IKE, "\t\tMe están llamando desde generate_message:task_manager_v2.c [RETURN TRUE]");
 	return TRUE;
 }
 
@@ -379,7 +379,7 @@ METHOD(task_manager_t, retransmit, status_t,
 			}
 			if (!mobike)
 			{	
-				DBG1(DBG_ENC, "\t\tMe están llamando desde retransmit:task_manager_v2.c [!mobike]");
+				//DBG1(DBG_ENC, "\t\tMe están llamando desde retransmit:task_manager_v2.c [!mobike]");
 
 				send_packets(this, this->initiating.packets,
 							 this->ike_sa->get_my_host(this->ike_sa),
@@ -483,7 +483,7 @@ METHOD(task_manager_t, initiate, status_t,
 	host_t *me, *other;
 	exchange_type_t exchange = 0;
 	bool result;
-	DBG1(DBG_IKE, "\t\t Me están llamando desde initiate:task_manager_v2.c");
+	//DBG1(DBG_IKE, "\t\t Me están llamando desde initiate:task_manager_v2.c");
 	if (this->initiating.type != EXCHANGE_TYPE_UNDEFINED)
 	{
 		DBG2(DBG_IKE, "delaying task initiation, %N exchange in progress",
@@ -504,7 +504,7 @@ METHOD(task_manager_t, initiate, status_t,
 		switch (this->ike_sa->get_state(this->ike_sa))
 		{
 			case IKE_CREATED:
-				DBG1(DBG_IKE, "\t\t\t Me están llamando desde IKE_CREATED.");
+				//DBG1(DBG_IKE, "\t\t\t Me están llamando desde IKE_CREATED.");
 				activate_task(this, TASK_IKE_VENDOR);
 				if (activate_task(this, TASK_IKE_INIT))
 				{
@@ -733,13 +733,13 @@ METHOD(task_manager_t, initiate, status_t,
 		}
 		enumerator->destroy(enumerator);
 	}
-	DBG1(DBG_IKE, "\t\tMe están llamando desde initiate:task_manager_v2.c [message->destroy(message)]");
+	//DBG1(DBG_IKE, "\t\tMe están llamando desde initiate:task_manager_v2.c [message->destroy(message)]");
 	message->destroy(message);
-	DBG1(DBG_IKE, "\t\tMe están llamando desde initiate:task_manager_v2.c [antes !result]");
+	//DBG1(DBG_IKE, "\t\tMe están llamando desde initiate:task_manager_v2.c [antes !result]");
 	if (!result)
 	{	/* message generation failed. There is nothing more to do than to
 		 * close the SA */
-		DBG1(DBG_IKE, "Me están llamando desde initiate:task_manager_v2.c [!result]");
+		//DBG1(DBG_IKE, "Me están llamando desde initiate:task_manager_v2.c [!result]");
 		flush(this);
 		if (this->ike_sa->get_state(this->ike_sa) != IKE_CONNECTING &&
 			this->ike_sa->get_state(this->ike_sa) != IKE_REKEYED)
@@ -752,7 +752,7 @@ METHOD(task_manager_t, initiate, status_t,
 	array_compress(this->active_tasks);
 	array_compress(this->queued_tasks);
 
-	DBG1(DBG_IKE, "\t\tMe están llamando desde initiate:task_manager_v2.c [return retransmit]");
+	//DBG1(DBG_IKE, "\t\tMe están llamando desde initiate:task_manager_v2.c [return retransmit]");
 	return retransmit(this, this->initiating.mid);
 }
 
@@ -1064,22 +1064,22 @@ static status_t build_response(private_task_manager_t *this, message_t *request)
 		charon->bus->ike_updown(charon->bus, this->ike_sa, FALSE);
 		return DESTROY_ME;
 	}
-	DBG1(DBG_ENC, "\t\tMe están llamando desde build_response:task_manager_v2.c [ANTES]");
+	//DBG1(DBG_ENC, "\t\tMe están llamando desde build_response:task_manager_v2.c [ANTES]");
 	send_packets(this, this->responding.packets, NULL, NULL);
-	DBG1(DBG_ENC, "\t\tMe están llamando desde build_response:task_manager_v2.c [DESPUES]");
+	//DBG1(DBG_ENC, "\t\tMe están llamando desde build_response:task_manager_v2.c [DESPUES]");
 	if (delete)
 	{
-		DBG1(DBG_ENC, "\t\tMe están llamando desde build_response:task_manager_v2.c [DELETE]");
+		//DBG1(DBG_ENC, "\t\tMe están llamando desde build_response:task_manager_v2.c [DELETE]");
 		if (hook)
 		{
-			DBG1(DBG_ENC, "\t\tMe están llamando desde build_response:task_manager_v2.c [hook]");
+			//DBG1(DBG_ENC, "\t\tMe están llamando desde build_response:task_manager_v2.c [hook]");
 			charon->bus->ike_updown(charon->bus, this->ike_sa, FALSE);
 		}
 		return DESTROY_ME;
 	}
 	else if (mid_sync)
 	{
-		DBG1(DBG_ENC, "\t\tMe están llamando desde build_response:task_manager_v2.c [CLEAR]");
+		//DBG1(DBG_ENC, "\t\tMe están llamando desde build_response:task_manager_v2.c [CLEAR]");
 		/* we don't want to resend messages to sync MIDs if requests with the
 		 * previous MID arrive */
 		clear_packets(this->responding.packets);
@@ -1090,7 +1090,7 @@ static status_t build_response(private_task_manager_t *this, message_t *request)
 
 	array_compress(this->passive_tasks);
 
-	DBG1(DBG_ENC, "\t\tMe están llamando desde build_response:task_manager_v2.c [SUCCESS]");
+	//DBG1(DBG_ENC, "\t\tMe están llamando desde build_response:task_manager_v2.c [SUCCESS]");
 	return SUCCESS;
 }
 
@@ -1116,7 +1116,7 @@ static status_t process_request(private_task_manager_t *this,
 			{
 				task = (task_t*)ike_vendor_create(this->ike_sa, FALSE);
 				array_insert(this->passive_tasks, ARRAY_TAIL, task);
-				DBG1(DBG_IKE, "\t\tMe están llamando desde process_request en task manager.");
+				//DBG1(DBG_IKE, "\t\tMe están llamando desde process_request en task manager.");
 				task = (task_t*)ike_init_create(this->ike_sa, FALSE, NULL);
 				array_insert(this->passive_tasks, ARRAY_TAIL, task);
 				task = (task_t*)ike_natd_create(this->ike_sa, FALSE);
@@ -1307,7 +1307,7 @@ static status_t process_request(private_task_manager_t *this,
 				break;
 		}
 	}
-	DBG1(DBG_IKE, "\t\tMe están llamando desde process_request en task manager (entrando en el While[1]).");
+	//DBG1(DBG_IKE, "\t\tMe están llamando desde process_request en task manager (entrando en el While[1]).");
 	enumerator = array_create_enumerator(this->passive_tasks);
 	while (enumerator->enumerate(enumerator, &task))
 	{
@@ -1318,7 +1318,7 @@ static status_t process_request(private_task_manager_t *this,
 		switch (task->pre_process(task, message))
 		{
 			case SUCCESS:
-				DBG1(DBG_IKE, "\t\tMe están llamando desde process_request en task manager (entrando en el While[1] - SUCCESS).");
+				//DBG1(DBG_IKE, "\t\tMe están llamando desde process_request en task manager (entrando en el While[1] - SUCCESS).");
 				break;
 			case FAILED:
 			default:
@@ -1347,7 +1347,7 @@ static status_t process_request(private_task_manager_t *this,
 	}
 	enumerator->destroy(enumerator);
 
-	DBG1(DBG_IKE, "\t\tMe están llamando desde process_request en task manager (entrando en el While[2]).");
+	//DBG1(DBG_IKE, "\t\tMe están llamando desde process_request en task manager (entrando en el While[2]).");
 	/* let the tasks process the message */
 	enumerator = array_create_enumerator(this->passive_tasks);
 	while (enumerator->enumerate(enumerator, (void*)&task))
@@ -1355,18 +1355,18 @@ static status_t process_request(private_task_manager_t *this,
 		switch (task->process(task, message))
 		{
 			case SUCCESS:
-				DBG1(DBG_IKE, "\t\tMe están llamando desde process_request en task manager (entrando en el While[2] - SUCCESS).");
+				//DBG1(DBG_IKE, "\t\tMe están llamando desde process_request en task manager (entrando en el While[2] - SUCCESS).");
 				/* task completed, remove it */
 				array_remove_at(this->passive_tasks, enumerator);
 				task->destroy(task);
 				break;
 			case NEED_MORE:
-				DBG1(DBG_IKE, "\t\tMe están llamando desde process_request en task manager (entrando en el While[2] - NEED_MORE).");
+				//DBG1(DBG_IKE, "\t\tMe están llamando desde process_request en task manager (entrando en el While[2] - NEED_MORE).");
 				/* processed, but task needs at least another call to build() */
 				break;
 			case FAILED:
 			default:
-				DBG1(DBG_IKE, "\t\tMe están llamando desde process_request en task manager (entrando en el While[2] - DEFAULT).");
+				//DBG1(DBG_IKE, "\t\tMe están llamando desde process_request en task manager (entrando en el While[2] - DEFAULT).");
 				charon->bus->ike_updown(charon->bus, this->ike_sa, FALSE);
 				/* FALL */
 			case DESTROY_ME:
@@ -1379,7 +1379,7 @@ static status_t process_request(private_task_manager_t *this,
 	}
 	enumerator->destroy(enumerator);
 
-	DBG1(DBG_IKE, "\t\tMe están llamando desde process_request en task manager (entrando en el While[3]).");
+	//DBG1(DBG_IKE, "\t\tMe están llamando desde process_request en task manager (entrando en el While[3]).");
 	enumerator = array_create_enumerator(this->passive_tasks);
 	while (enumerator->enumerate(enumerator, &task))
 	{
@@ -1405,7 +1405,7 @@ static status_t process_request(private_task_manager_t *this,
 	}
 	enumerator->destroy(enumerator);
 	
-	DBG1(DBG_IKE, "\t\tMe están llamando desde process_request en task manager return build_response).");
+	//DBG1(DBG_IKE, "\t\tMe están llamando desde process_request en task manager return build_response).");
 	return build_response(this, message);
 }
 
@@ -1951,7 +1951,7 @@ METHOD(task_manager_t, process_message, status_t,
 		{	/* ignore messages altered to EXCHANGE_TYPE_UNDEFINED */
 			return SUCCESS;
 		}
-		DBG1(DBG_IKE, "\t\tMe están llamando desde process_message:task_manager_v2 [process_req]");
+		//DBG1(DBG_IKE, "\t\tMe están llamando desde process_message:task_manager_v2 [process_req]");
 		switch (process_request(this, msg))
 		{
 			case SUCCESS:
@@ -1960,7 +1960,7 @@ METHOD(task_manager_t, process_message, status_t,
 				this->responding.mid++;
 				memcpy(this->responding.prev_hash, this->responding.hash,
 					   sizeof(this->responding.prev_hash));
-				DBG1(DBG_IKE, "\t\tMe están llamando desde process_message:task_manager_v2 [FIN SUCCESS]");
+				//DBG1(DBG_IKE, "\t\tMe están llamando desde process_message:task_manager_v2 [FIN SUCCESS]");
 				break;
 			case NEED_MORE:
 				break;
@@ -2019,7 +2019,7 @@ METHOD(task_manager_t, process_message, status_t,
 						"%s.half_open_timeout", HALF_OPEN_IKE_SA_TIMEOUT,
 						lib->ns));
 	}
-	DBG1(DBG_IKE, "\t\tMe están llamando desde process_message:task_manager_v2 [RETURN SUCCESS]");
+	//DBG1(DBG_IKE, "\t\tMe están llamando desde process_message:task_manager_v2 [RETURN SUCCESS]");
 	return SUCCESS;
 }
 
@@ -2096,7 +2096,7 @@ METHOD(task_manager_t, queue_ike, void,
 	// }
 	if (!has_queued(this, TASK_IKE_INIT))
 	{
-		DBG1(DBG_IKE, "\t\tMe están llamando desde el método queue_ike en task manager.");
+		//DBG1(DBG_IKE, "\t\tMe están llamando desde el método queue_ike en task manager.");
 		queue_task(this, (task_t*)ike_init_create(this->ike_sa, TRUE, NULL));
 	}
 	if (!has_queued(this, TASK_IKE_NATD))

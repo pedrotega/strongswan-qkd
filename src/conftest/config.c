@@ -122,7 +122,7 @@ static ike_cfg_t *load_ike_config(private_config_t *this,
 									FALSE, config),
 	};
 	
-	DBG1(DBG_IKE, "\t\tMe están llamando desde load_ike_config config.c.");
+	//DBG1(DBG_IKE, "\t\tMe están llamando desde load_ike_config config.c.");
 	ike_cfg = ike_cfg_create(&ike);
 	token = settings->get_str(settings, "configs.%s.proposal", NULL, config);
 	if (token)

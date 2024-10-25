@@ -2679,7 +2679,7 @@ CALLBACK(config_sn, bool,
 		.childless = peer.childless,
 		.dscp = peer.dscp,
 	};
-	DBG1(DBG_IKE, "\t\tMe están llamando ike_cfg_create desde vici_config.c.");
+	//DBG1(DBG_IKE, "\t\tMe están llamando ike_cfg_create desde vici_config.c.");
 	ike_cfg = ike_cfg_create(&ike);
 
 	cfg = (peer_cfg_create_t){

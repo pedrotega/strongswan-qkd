@@ -185,7 +185,7 @@ static peer_cfg_t* create_peer_cfg(private_cmd_connection_t *this)
 	{
 		ike.remote_port = IKEV2_NATT_PORT;
 	}
-	DBG1(DBG_IKE, "\t\tMe están llamando ike_cfg_create desde cmd_connection.c.");
+	//DBG1(DBG_IKE, "\t\tMe están llamando ike_cfg_create desde cmd_connection.c.");
 	ike_cfg = ike_cfg_create(&ike);
 	if (this->ike_proposals->get_count(this->ike_proposals))
 	{

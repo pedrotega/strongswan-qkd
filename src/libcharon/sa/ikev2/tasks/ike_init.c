@@ -494,7 +494,7 @@ static void process_sa_payload(private_ike_init_t *this, message_t *message,
 	{
 		flags |= PROPOSAL_PREFER_SUPPLIED;
 	}
-	DBG1(DBG_IKE, "\t\tMe están llamando select_proposal desde ike_init.c.");
+	//DBG1(DBG_IKE, "\t\tMe están llamando select_proposal desde ike_init.c.");
 	this->proposal = ike_cfg->select_proposal(ike_cfg, proposal_list, flags);
 	if (!this->proposal)
 	{
@@ -550,18 +550,18 @@ static void process_payloads(private_ike_init_t *this, message_t *message)
 	enumerator = message->create_payload_enumerator(message);
 	while (enumerator->enumerate(enumerator, &payload))
 	{
-		DBG1(DBG_IKE, "\t\tMe están llamando desde process_payloads:ike_init.c %d.", payload->get_type(payload));
+		//DBG1(DBG_IKE, "\t\tMe están llamando desde process_payloads:ike_init.c %d.", payload->get_type(payload));
 		switch (payload->get_type(payload))
 		{
 			case PLV2_SECURITY_ASSOCIATION:
 			{
-				DBG1(DBG_IKE, "\t\tMe están llamando desde process_payloads:ike_init.c PLV2_SECURITY_ASSOCIATION.");
+				//DBG1(DBG_IKE, "\t\tMe están llamando desde process_payloads:ike_init.c PLV2_SECURITY_ASSOCIATION.");
 				process_sa_payload(this, message, (sa_payload_t*)payload);
 				break;
 			}
 			case PLV2_KEY_EXCHANGE:
 			{
-				DBG1(DBG_IKE, "\t\tMe están llamando desde process_payloads:ike_init.c PLV2_KEY_EXCHANGE.");
+				//DBG1(DBG_IKE, "\t\tMe están llamando desde process_payloads:ike_init.c PLV2_KEY_EXCHANGE.");
 				ke_payload = (ke_payload_t*)payload;
 
 				this->dh_group = ke_payload->get_key_exchange_method(ke_payload);
@@ -569,7 +569,7 @@ static void process_payloads(private_ike_init_t *this, message_t *message)
 			}
 			case PLV2_NONCE:
 			{
-				DBG1(DBG_IKE, "\t\tMe están llamando desde process_payloads:ike_init.c PLV2_NONCE.");
+				//DBG1(DBG_IKE, "\t\tMe están llamando desde process_payloads:ike_init.c PLV2_NONCE.");
 				nonce_payload_t *nonce_payload = (nonce_payload_t*)payload;
 
 				this->other_nonce = nonce_payload->get_nonce(nonce_payload);
@@ -577,16 +577,17 @@ static void process_payloads(private_ike_init_t *this, message_t *message)
 			}
 			case PLV2_QKD:
 			{
-				DBG1(DBG_IKE, "\t\tMe están llamando desde process_payloads:ike_init.c PLV2_QKD.");
+				//DBG1(DBG_IKE, "\t\tMe están llamando desde process_payloads:ike_init.c PLV2_QKD.");
 				qkd_payload_t *qkd_payload = (qkd_payload_t*)payload;
-				chunk_t data = qkd_payload->get_data(qkd_payload);
-				DBG1(DBG_IKE, "\t\tMe están llamando desde PLV2_QKD: %s", data);
-
+				this->qkd_key_id = qkd_payload->get_data(qkd_payload);
+				//chunk_t data = qkd_payload->get_data(qkd_payload);
+				DBG1(DBG_IKE, "\t\tMe están llamando desde PLV2_QKD: %s", this->qkd_key_id);
+				break;
 				//this->qkd_key_id = qkd_payload->get_data(qkd_payload);
 			}
 			case PLV2_NOTIFY:
 			{
-				DBG1(DBG_IKE, "\t\tMe están llamando desde process_payloads:ike_init.c PLV2_NOTIFY.");
+				//DBG1(DBG_IKE, "\t\tMe están llamando desde process_payloads:ike_init.c PLV2_NOTIFY.");
 				notify_payload_t *notify = (notify_payload_t*)payload;
 
 				switch (notify->get_notify_type(notify))
@@ -649,7 +650,7 @@ static void process_payloads(private_ike_init_t *this, message_t *message)
 				break;
 		}
 	}
-	DBG1(DBG_IKE, "\t\tMe están llamando desde process_payloads:ike_init.c Payloads analizados.");
+	//DBG1(DBG_IKE, "\t\tMe están llamando desde process_payloads:ike_init.c Payloads analizados.");
 	enumerator->destroy(enumerator);
 
 	if (this->proposal)
@@ -1210,6 +1211,7 @@ METHOD(task_t, destroy, void,
 	chunk_free(&this->my_nonce);
 	chunk_free(&this->other_nonce);
 	chunk_free(&this->cookie);
+	chunk_free(&this->qkd_key_id);
 	free(this);
 }
 

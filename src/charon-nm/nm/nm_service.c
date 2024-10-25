@@ -814,7 +814,7 @@ static gboolean connect_(NMVpnServicePlugin *plugin, NMConnection *connection,
 	/**
 	 * Set up configurations
 	 */
-	DBG1(DBG_IKE, "\t\tMe están llamando ike_cfg_create desde nm_service.c.");
+	//DBG1(DBG_IKE, "\t\tMe están llamando ike_cfg_create desde nm_service.c.");
 	ike_cfg = ike_cfg_create(&ike);
 
 	str = nm_setting_vpn_get_data_item(vpn, "proposal");

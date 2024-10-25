@@ -250,7 +250,7 @@ METHOD(child_cfg_t, select_proposal, proposal_t*,
 	private_child_cfg_t*this, linked_list_t *proposals,
 	proposal_selection_flag_t flags)
 {
-	DBG1(DBG_IKE, "\t\tMe están llamando desde select_proposal child_cfg.c.");
+	//DBG1(DBG_IKE, "\t\tMe están llamando desde select_proposal child_cfg.c.");
 	return proposal_select(this->proposals, proposals, flags);
 }
 

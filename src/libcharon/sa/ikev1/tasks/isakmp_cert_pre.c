@@ -318,7 +318,7 @@ static void add_certreq(private_isakmp_cert_pre_t *this, message_t *message,
 
 		if (x509->get_flags(x509) & X509_CA)
 		{
-			DBG1(DBG_IKE, "\t\tMe están llamando desde add_certreq: isakmp_cert_pre");
+			//DBG1(DBG_IKE, "\t\tMe están llamando desde add_certreq: isakmp_cert_pre");
 			DBG1(DBG_IKE, "sending cert request for \"%Y\"",
 				 cert->get_subject(cert));
 			message->add_payload(message, (payload_t*)
@@ -552,7 +552,7 @@ METHOD(task_t, build_r, status_t,
 				case CR_KE:
 					if (this->send_req)
 					{
-						DBG1(DBG_IKE, "\t\tMe están llamando desde build_r [1]: isakmp_cert_pre");
+						//DBG1(DBG_IKE, "\t\tMe están llamando desde build_r [1]: isakmp_cert_pre");
 						build_certreqs(this, message);
 					}
 					this->state = CR_AUTH;
@@ -568,7 +568,7 @@ METHOD(task_t, build_r, status_t,
 				case CR_SA:
 					if (this->send_req)
 					{
-						DBG1(DBG_IKE, "\t\tMe están llamando desde build_r [2]: isakmp_cert_pre");
+						//DBG1(DBG_IKE, "\t\tMe están llamando desde build_r [2]: isakmp_cert_pre");
 						build_certreqs(this, message);
 					}
 					this->state = CR_AUTH;

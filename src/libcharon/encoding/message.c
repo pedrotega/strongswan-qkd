@@ -128,7 +128,7 @@ static payload_rule_t ike_sa_init_i_rules[] = {
 	{PLV2_SECURITY_ASSOCIATION,		1,	1,						FALSE,	FALSE},
 	{PLV2_KEY_EXCHANGE,				1,	1,						FALSE,	FALSE},
 	{PLV2_NONCE,					1,	1,						FALSE,	FALSE},
-	{PLV2_QKD,						0,	1,						FALSE,	FALSE},
+	{PLV2_QKD,						1,	1,						FALSE,	FALSE},
 	{PLV2_VENDOR_ID,				0,	MAX_VID_PAYLOADS,		FALSE,	FALSE},
 };
 
@@ -158,7 +158,6 @@ static payload_rule_t ike_sa_init_r_rules[] = {
 	{PLV2_KEY_EXCHANGE,				1,	1,						FALSE,	FALSE},
 	{PLV2_NONCE,					1,	1,						FALSE,	FALSE},
 	{PLV2_CERTREQ,					0,	MAX_CERTREQ_PAYLOADS,	FALSE,	FALSE},
-	{PLV2_QKD,						1,	1,						FALSE,	FALSE},
 	{PLV2_VENDOR_ID,				0,	MAX_VID_PAYLOADS,		FALSE,	FALSE},
 };
 
@@ -175,7 +174,6 @@ static payload_order_t ike_sa_init_r_order[] = {
 	{PLV2_NOTIFY,					HTTP_CERT_LOOKUP_SUPPORTED},
 	{PLV2_CERTREQ,					0},
 	{PLV2_NOTIFY,					0},
-	{PLV2_QKD,						0},
 	{PLV2_VENDOR_ID,				0},
 };
 
@@ -202,7 +200,6 @@ static payload_rule_t ike_auth_i_rules[] = {
 	{PLV2_TS_RESPONDER,				0,	1,						TRUE,	FALSE},
 #endif /* ME */
 	{PLV2_CONFIGURATION,			0,	1,						TRUE,	FALSE},
-	{PLV2_QKD,						0,	1,						TRUE,	FALSE},
 	{PLV2_VENDOR_ID,				0,	MAX_VID_PAYLOADS,		TRUE,	FALSE},
 };
 
@@ -232,7 +229,6 @@ static payload_order_t ike_auth_i_order[] = {
 	{PLV2_NOTIFY,					ADDITIONAL_IP6_ADDRESS},
 	{PLV2_NOTIFY,					NO_ADDITIONAL_ADDRESSES},
 	{PLV2_NOTIFY,					0},
-	{PLV2_QKD,						0},
 	{PLV2_VENDOR_ID,				0},
 	{PLV2_FRAGMENT,					0},
 };
@@ -252,7 +248,6 @@ static payload_rule_t ike_auth_r_rules[] = {
 	{PLV2_TS_INITIATOR,				0,	1,						TRUE,	FALSE},
 	{PLV2_TS_RESPONDER,				0,	1,						TRUE,	FALSE},
 	{PLV2_CONFIGURATION,			0,	1,						TRUE,	FALSE},
-	{PLV2_QKD,						0,	1,						TRUE,	FALSE},
 	{PLV2_VENDOR_ID,				0,	MAX_VID_PAYLOADS,		TRUE,	FALSE},
 };
 
@@ -279,7 +274,6 @@ static payload_order_t ike_auth_r_order[] = {
 	{PLV2_NOTIFY,					ADDITIONAL_IP6_ADDRESS},
 	{PLV2_NOTIFY,					NO_ADDITIONAL_ADDRESSES},
 	{PLV2_NOTIFY,					0},
-	{PLV2_QKD,						0},
 	{PLV2_VENDOR_ID,				0},
 	{PLV2_FRAGMENT,					0},
 };
@@ -1730,11 +1724,11 @@ static status_t generate_message(private_message_t *this, keymat_t *keymat,
 	if (this->major_version == IKEV2_MAJOR_VERSION)
 	{
 		encrypting = this->rule->encrypted;
-		DBG1(DBG_ENC, "\t\tMe están llamando desde generate message en message.c Primer if, encripting: %d",encrypting);
+		//DBG1(DBG_ENC, "\t\tMe están llamando desde generate message en message.c Primer if, encripting: %d",encrypting);
 	}
 	else if (!encrypting)
 	{
-		DBG1(DBG_ENC, "\t\tMe están llamando desde generate message en message.c Segundo if");
+		//DBG1(DBG_ENC, "\t\tMe están llamando desde generate message en message.c Segundo if");
 		/* If at least one payload requires encryption, encrypt the message.
 		 * If no key material is available, the flag will be reset below. */
 		enumerator = this->payloads->create_enumerator(this->payloads);
@@ -1754,21 +1748,21 @@ static status_t generate_message(private_message_t *this, keymat_t *keymat,
 
 #if DEBUG_LEVEL >= 1
 	char str[BUF_LEN];
-	DBG1(DBG_ENC, "\t\tMe están llamando desde generate message en message.c");
+	//DBG1(DBG_ENC, "\t\tMe están llamando desde generate message en message.c");
 	DBG1(DBG_ENC, "generating %s", get_string(this, str, sizeof(str)));
 #endif
 
 	if (keymat)
 	{
-		DBG1(DBG_ENC, "\t\tMe están llamando desde generate message en message.c: if keymat");
+		//DBG1(DBG_ENC, "\t\tMe están llamando desde generate message en message.c: if keymat");
 		aead = keymat->get_aead(keymat, FALSE);
 	}
 	if (encrypting)
 	{
-		DBG1(DBG_ENC, "\t\tMe están llamando desde generate message en message.c: if encrypting");
+		//DBG1(DBG_ENC, "\t\tMe están llamando desde generate message en message.c: if encrypting");
 		if (aead)
 		{
-			DBG1(DBG_ENC, "\t\tMe están llamando desde generate message en message.c: if aead");
+			//DBG1(DBG_ENC, "\t\tMe están llamando desde generate message en message.c: if aead");
 			*encrypted = wrap_payloads(this);
 			(*encrypted)->set_transform(*encrypted, aead);
 		}
@@ -1785,7 +1779,7 @@ static status_t generate_message(private_message_t *this, keymat_t *keymat,
 	}
 	if (!encrypting)
 	{
-		DBG1(DBG_ENC, "\t\tMe están llamando desde generate message en message.c: if !encrypting");
+		//DBG1(DBG_ENC, "\t\tMe están llamando desde generate message en message.c: if !encrypting");
 		DBG2(DBG_ENC, "not encrypting payloads");
 		this->is_encrypted = FALSE;
 	}
@@ -1825,7 +1819,7 @@ static status_t generate_message(private_message_t *this, keymat_t *keymat,
 	DBG1(DBG_ENC ,"\tNext type: %N",
 		payload_type_names, payload->get_next_type(payload));
 	ike_header->destroy(ike_header);
-	DBG1(DBG_ENC, "\t\tMe están llamando desde generate message en message.c: SUCCESS");
+	//DBG1(DBG_ENC, "\t\tMe están llamando desde generate message en message.c: SUCCESS");
 	return SUCCESS;
 }
 
@@ -1842,7 +1836,7 @@ static status_t finalize_message(private_message_t *this, keymat_t *keymat,
 
 	if (encrypted)
 	{
-		DBG1(DBG_ENC, "\t\tMe están llamando desde finalize_generate:message.c [encrypted]");
+		//DBG1(DBG_ENC, "\t\tMe están llamando desde finalize_generate:message.c [encrypted]");
 		if (this->is_encrypted)
 		{	/* for IKEv1 instead of associated data we provide the IV */
 			if (!keymat_v1->get_iv(keymat_v1, this->message_id, &chunk))
@@ -1887,7 +1881,7 @@ static status_t finalize_message(private_message_t *this, keymat_t *keymat,
 		}
 	}
 	generator->destroy(generator);
-	DBG1(DBG_ENC, "\t\tMe están llamando desde finalize_message:message.c [SUCCESS]");
+	//DBG1(DBG_ENC, "\t\tMe están llamando desde finalize_message:message.c [SUCCESS]");
 	return SUCCESS;
 }
 
@@ -1898,7 +1892,7 @@ METHOD(message_t, generate, status_t,
 	encrypted_payload_t *encrypted = NULL;
 	status_t status;
 
-	DBG1(DBG_ENC, "\t\tMe están llamando desde generate en message.c");
+	//DBG1(DBG_ENC, "\t\tMe están llamando desde generate en message.c");
 	status = generate_message(this, keymat, &generator, &encrypted);
 	if (status != SUCCESS)
 	{
@@ -1914,7 +1908,7 @@ METHOD(message_t, generate, status_t,
 	{
 		*packet = this->packet->clone(this->packet);
 	}
-	DBG1(DBG_ENC, "\t\tMe están llamando desde generate en message.c: SUCCESS");
+	//DBG1(DBG_ENC, "\t\tMe están llamando desde generate en message.c: SUCCESS");
 	return SUCCESS;
 }
 
@@ -2055,7 +2049,7 @@ METHOD(message_t, fragment, status_t,
 	}
 	else
 	{
-		DBG1(DBG_ENC, "\t\tMe están llamando desde fragment en message.c");
+		//DBG1(DBG_ENC, "\t\tMe están llamando desde fragment en message.c");
 		status = generate_message(this, keymat, &generator, &encrypted);
 		if (status != SUCCESS)
 		{
@@ -2147,7 +2141,7 @@ METHOD(message_t, fragment, status_t,
 		len = min(data.len, frag_len);
 		fragment = create_fragment(this, next, num, count,
 								   chunk_create(data.ptr, len));
-		DBG1(DBG_ENC, "Me están llamando desde fragment:message.c");
+		//DBG1(DBG_ENC, "Me están llamando desde fragment:message.c");
 		status = fragment->generate(fragment, keymat, &packet);
 		fragment->destroy(fragment);
 		if (status != SUCCESS)
@@ -2683,7 +2677,7 @@ METHOD(message_t, parse_body, status_t,
 	 * contained in the encrypted payload, which are handled below) */
 	if (this->parser)
 	{
-		DBG1(DBG_ENC, "Me están llamando desde parse_body:message.c");
+		//DBG1(DBG_ENC, "Me están llamando desde parse_body:message.c");
 		status = parse_payloads(this);
 		if (status != SUCCESS)
 		{	/* error is already logged */
@@ -3017,7 +3011,7 @@ METHOD(message_t, destroy, void,
 	this->packet->destroy(this->packet);
 	if (this->frag)
 	{
-		DBG1(DBG_IKE, "\t\tMe están llamando desde destroy:message.c [IF]");
+		//DBG1(DBG_IKE, "\t\tMe están llamando desde destroy:message.c [IF]");
 		reset_defrag(this);
 		free(this->frag);
 	}

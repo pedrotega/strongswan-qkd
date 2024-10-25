@@ -439,7 +439,7 @@ static void add_certreq(certreq_payload_t **req, certificate_t *cert)
 			if (public->get_fingerprint(public, KEYID_PUBKEY_INFO_SHA1, &keyid))
 			{
 				(*req)->add_keyid(*req, keyid);
-				DBG1(DBG_IKE, "\t\tMe están llamando desde add_certreq: ike_cert_pre");
+				//DBG1(DBG_IKE, "\t\tMe están llamando desde add_certreq: ike_cert_pre");
 				DBG1(DBG_IKE, "sending cert request for \"%Y\"",
 					 cert->get_subject(cert));
 			}
@@ -466,7 +466,7 @@ static void add_certreqs(certreq_payload_t **req, auth_cfg_t *auth)
 		switch (type)
 		{
 			case AUTH_RULE_CA_CERT:
-				DBG1(DBG_IKE, "\t\tMe están llamando desde add_certreqs: ike_cert_pre");
+				//DBG1(DBG_IKE, "\t\tMe están llamando desde add_certreqs: ike_cert_pre");
 				add_certreq(req, (certificate_t*)value);
 				break;
 			default:
@@ -528,7 +528,7 @@ static void build_certreqs(private_ike_cert_pre_t *this, message_t *message)
 			enumerator = peer_cfg->create_auth_cfg_enumerator(peer_cfg, FALSE);
 			while (enumerator->enumerate(enumerator, &auth))
 			{
-				DBG1(DBG_IKE, "\t\tMe están llamando desde build_certreqs [1]: ike_cert_pre");
+				//DBG1(DBG_IKE, "\t\tMe están llamando desde build_certreqs [1]: ike_cert_pre");
 				add_certreqs(&req, auth);
 			}
 			enumerator->destroy(enumerator);
@@ -541,7 +541,7 @@ static void build_certreqs(private_ike_cert_pre_t *this, message_t *message)
 													CERT_ANY, KEY_ANY, NULL, TRUE);
 			while (enumerator->enumerate(enumerator, &cert))
 			{
-				DBG1(DBG_IKE, "\t\tMe están llamando desde build_certreqs [2]: ike_cert_pre");
+				//DBG1(DBG_IKE, "\t\tMe están llamando desde build_certreqs [2]: ike_cert_pre");
 				add_certreq(&req, cert);
 			}
 			enumerator->destroy(enumerator);
@@ -569,7 +569,7 @@ static void build_certreqs(private_ike_cert_pre_t *this, message_t *message)
 												CERT_ANY, KEY_ANY, NULL, TRUE);
 		while (enumerator->enumerate(enumerator, &cert))
 		{
-			DBG1(DBG_IKE, "\t\tMe están llamando desde build_certreqs [3]: ike_cert_pre");
+			//DBG1(DBG_IKE, "\t\tMe están llamando desde build_certreqs [3]: ike_cert_pre");
 			add_certreq_ocsp(req, cert);
 		}
 		enumerator->destroy(enumerator);
@@ -592,7 +592,7 @@ METHOD(task_t, build_i, status_t,
 {
 	if (message->get_exchange_type(message) == IKE_AUTH)
 	{	/* initiator sends CERTREQs in first IKE_AUTH only */
-		DBG1(DBG_IKE, "\t\tMe están llamando desde build_i: ike_cert_pre");
+		//DBG1(DBG_IKE, "\t\tMe están llamando desde build_i: ike_cert_pre");
 		build_certreqs(this, message);
 		this->public.task.build = (void*)return_need_more;
 	}
@@ -619,7 +619,7 @@ METHOD(task_t, build_r, status_t,
 {
 	if (message->get_exchange_type(message) == IKE_SA_INIT)
 	{
-		DBG1(DBG_IKE, "\t\tMe están llamando desde build_r: ike_cert_pre");
+		//DBG1(DBG_IKE, "\t\tMe están llamando desde build_r: ike_cert_pre");
 		build_certreqs(this, message);
 	}
 	return NEED_MORE;
@@ -671,7 +671,7 @@ METHOD(task_t, destroy, void,
 ike_cert_pre_t *ike_cert_pre_create(ike_sa_t *ike_sa, bool initiator)
 {
 	private_ike_cert_pre_t *this;
-	DBG1(DBG_IKE, "\t\tMe están llamando desde ike_cert_pre_create (str): ike_cert_pre");
+	//DBG1(DBG_IKE, "\t\tMe están llamando desde ike_cert_pre_create (str): ike_cert_pre");
 
 	INIT(this,
 		.public = {
@@ -687,13 +687,13 @@ ike_cert_pre_t *ike_cert_pre_create(ike_sa_t *ike_sa, bool initiator)
 
 	if (initiator)
 	{
-		DBG1(DBG_IKE, "\t\tMe están llamando desde ike_cert_pre_create (ini): ike_cert_pre");
+		//DBG1(DBG_IKE, "\t\tMe están llamando desde ike_cert_pre_create (ini): ike_cert_pre");
 		this->public.task.build = _build_i;
 		this->public.task.process = _process_i;
 	}
 	else
 	{
-		DBG1(DBG_IKE, "\t\tMe están llamando desde ike_cert_pre_create (res): ike_cert_pre");
+		//DBG1(DBG_IKE, "\t\tMe están llamando desde ike_cert_pre_create (res): ike_cert_pre");
 		this->public.task.build = _build_r;
 		this->public.task.process = _process_r;
 	}
