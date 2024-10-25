@@ -2747,6 +2747,7 @@ METHOD(message_t, parse_body, status_t,
 			}
 		}
 	}
+	DBG1(DBG_ENC, "Me están llamando desde parse_body:message.c [SUCCESS]");
 	return SUCCESS;
 }
 

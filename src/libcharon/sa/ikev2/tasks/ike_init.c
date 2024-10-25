@@ -339,6 +339,7 @@ static bool build_payloads(private_ike_init_t *this, message_t *message)
 
 	if (this->initiator)
 	{
+		DBG1(DBG_IKE, "Me están llamando desde build_payloads:ike_init.c [this->initiator]");
 		proposal_list = ike_cfg->get_proposals(ike_cfg);
 		other_dh_groups = linked_list_create();
 		enumerator = proposal_list->create_enumerator(proposal_list);
@@ -494,7 +495,7 @@ static void process_sa_payload(private_ike_init_t *this, message_t *message,
 	{
 		flags |= PROPOSAL_PREFER_SUPPLIED;
 	}
-	//DBG1(DBG_IKE, "\t\tMe están llamando select_proposal desde ike_init.c.");
+	DBG1(DBG_IKE, "\t\tMe están llamando select_proposal desde ike_init.c.");
 	this->proposal = ike_cfg->select_proposal(ike_cfg, proposal_list, flags);
 	if (!this->proposal)
 	{
@@ -816,7 +817,7 @@ METHOD(task_t, process_r,  status_t,
 		}
 	}
 #endif /* ME */
-
+	DBG1(DBG_IKE, "Me están llamando desde process_r:ike_init.c");
 	process_payloads(this, message);
 
 	return NEED_MORE;
@@ -1148,6 +1149,7 @@ METHOD(task_t, process_i, status_t,
 	}
 	enumerator->destroy(enumerator);
 
+	DBG1(DBG_IKE, "Me están llamando desde process_i:ike_init.c");
 	process_payloads(this, message);
 
 	/* check if we have everything */
@@ -1176,9 +1178,11 @@ METHOD(task_t, process_i, status_t,
 	if (this->old_sa)
 	{
 		/* during rekeying, we derive keys here directly */
+		DBG1(DBG_IKE, "Me están llamando desde process_i:ike_init.c [DERIVE_KEYS]");
 		return derive_keys(this);
 	}
 	/* key derivation is done before we send the next message */
+	DBG1(DBG_IKE, "Me están llamando desde process_i:ike_init.c [NEED_MORE]");
 	return NEED_MORE;
 }
 
