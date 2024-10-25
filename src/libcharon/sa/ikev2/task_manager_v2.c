@@ -1971,10 +1971,7 @@ METHOD(task_manager_t, process_message, status_t,
 				this->responding.mid++;
 				memcpy(this->responding.prev_hash, this->responding.hash,
 					   sizeof(this->responding.prev_hash));
-<<<<<<< HEAD
 				//DBG1(DBG_IKE, "\t\tMe están llamando desde process_message:task_manager_v2 [FIN SUCCESS]");
-=======
->>>>>>> parent of 9217c04 (Checking for errors genereating response IKE_INIT)
 				break;
 			case NEED_MORE:
 				break;
