@@ -298,7 +298,6 @@ static void send_packets(private_task_manager_t *this, array_t *packets,
 		{
 			clone->set_destination(clone, dst->clone(dst));
 		}
-		DBG1(DBG_NET, "Me llaman antes del send_packets:task_manager_v2.c");
 		charon->sender->send(charon->sender, clone);
 	}
 }
@@ -379,7 +378,7 @@ METHOD(task_manager_t, retransmit, status_t,
 			}
 			if (!mobike)
 			{	
-				//DBG1(DBG_ENC, "\t\tMe están llamando desde retransmit:task_manager_v2.c [!mobike]");
+				DBG1(DBG_ENC, "\t\tMe están llamando desde retransmit:task_manager_v2.c [!mobike]");
 
 				send_packets(this, this->initiating.packets,
 							 this->ike_sa->get_my_host(this->ike_sa),
@@ -1543,7 +1542,6 @@ static void send_notify_response(private_task_manager_t *this,
 	if (this->ike_sa->generate_message(this->ike_sa, response,
 									   &packet) == SUCCESS)
 	{
-		DBG1(DBG_NET, "Me llaman antes del send_notify_response:task_manager_v2.c");
 		charon->sender->send(charon->sender, packet);
 	}
 	response->destroy(response);
@@ -2099,11 +2097,11 @@ METHOD(task_manager_t, queue_ike, void,
 	{
 		queue_task(this, (task_t*)ike_vendor_create(this->ike_sa, TRUE));
 	}
-	// if (!has_queued(this, TASK_IKE_QKD_KE))
-	// {
-	// 	//DBG1(DBG_IKE, "\t\tMe están llamando desde el método queue_ike en task manager. (QKD)");
-	// 	//queue_task(this, (task_t*)ike_qkd_create(this->ike_sa, TRUE));
-	// }
+	if (!has_queued(this, TASK_IKE_QKD_KE))
+	{
+		//DBG1(DBG_IKE, "\t\tMe están llamando desde el método queue_ike en task manager. (QKD)");
+		//queue_task(this, (task_t*)ike_qkd_create(this->ike_sa, TRUE));
+	}
 	if (!has_queued(this, TASK_IKE_INIT))
 	{
 		//DBG1(DBG_IKE, "\t\tMe están llamando desde el método queue_ike en task manager.");

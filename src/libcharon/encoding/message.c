@@ -1163,8 +1163,6 @@ METHOD(message_t, add_payload, void,
 
 	DBG2(DBG_ENC ,"added payload of type %N to message",
 		 payload_type_names, payload->get_type(payload));
-	/*DBG1(DBG_ENC ,"\tNext type: %N",
-		 payload_type_names, payload->get_next_type(payload));*/
 }
 
 METHOD(message_t, add_notify, void,
@@ -1793,10 +1791,6 @@ static status_t generate_message(private_message_t *this, keymat_t *keymat,
 	{
 		payload->set_next_type(payload, next->get_type(next));
 		generator->generate_payload(generator, payload);
-		// DBG1(DBG_ENC ,"added payload of type %N to message",
-		//  payload_type_names, payload->get_type(payload));
-		// DBG1(DBG_ENC ,"\tNext type: %N",
-		//  payload_type_names, payload->get_next_type(payload));
 		payload = next;
 	}
 	enumerator->destroy(enumerator);
@@ -1814,10 +1808,6 @@ static status_t generate_message(private_message_t *this, keymat_t *keymat,
 	}
 	payload->set_next_type(payload, next_type);
 	generator->generate_payload(generator, payload);
-	DBG1(DBG_ENC ,"added payload of type %N to message",
-		 payload_type_names, payload->get_type(payload));
-	DBG1(DBG_ENC ,"\tNext type: %N",
-		payload_type_names, payload->get_next_type(payload));
 	ike_header->destroy(ike_header);
 	//DBG1(DBG_ENC, "\t\tMe están llamando desde generate message en message.c: SUCCESS");
 	return SUCCESS;
@@ -2310,8 +2300,8 @@ static status_t parse_payloads(private_message_t *this)
 
 	while (type != PL_NONE)
 	{
-		DBG1(DBG_ENC, "starting parsing a %N payload %d",
-			 payload_type_names, type, type);
+		DBG2(DBG_ENC, "starting parsing a %N payload",
+			 payload_type_names, type);
 
 		status = this->parser->parse_payload(this->parser, type, &payload);
 		if (status != SUCCESS)
@@ -2330,16 +2320,14 @@ static status_t parse_payloads(private_message_t *this)
 			payload->destroy(payload);
 			return VERIFY_ERROR;
 		}
-	
 		if (payload->get_type(payload) == PL_UNKNOWN)
 		{
-			DBG1(DBG_ENC, "%N payload unknown or not allowed",
+			DBG2(DBG_ENC, "%N payload unknown or not allowed",
 				 payload_type_names, type);
-			DBG1(DBG_ENC, "%d", PL_UNKNOWN);
 		}
 		else
 		{
-			DBG1(DBG_ENC, "\t%N payload verified, adding to payload list",
+			DBG2(DBG_ENC, "%N payload verified, adding to payload list",
 				 payload_type_names, type);
 		}
 		this->payloads->insert_last(this->payloads, payload);
@@ -2353,7 +2341,6 @@ static status_t parse_payloads(private_message_t *this)
 			break;
 		}
 		type = payload->get_next_type(payload);
-		DBG1(DBG_ENC, "Next type: %d", type);
 	}
 	return SUCCESS;
 }
@@ -2661,7 +2648,7 @@ METHOD(message_t, parse_body, status_t,
 {
 	status_t status = SUCCESS;
 
-	DBG1(DBG_ENC, "parsing body of message, first payload is %N",
+	DBG2(DBG_ENC, "parsing body of message, first payload is %N",
 		 payload_type_names, this->first_payload);
 
 	this->rule = get_message_rule(this);
